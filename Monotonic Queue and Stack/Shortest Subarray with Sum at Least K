@@ -1,0 +1,41 @@
+class Solution {
+    public int shortestSubarray(int[] nums, int k) {
+        
+        //This is not a regular sliding window problem as it has negative values in them:
+        //On using prefix sum and deque we can achive this:
+
+        //first lets get the length of the array:
+        int n = nums.length;
+
+        //return value:
+        int res = Integer.MAX_VALUE;
+
+        //prefix sum storage array:
+        //let the data type be long as it can store values up to 10^5
+        long[] pre = new long[n+1];
+
+        //we need a deque: to store th indices:
+        Deque<Integer> dq = new ArrayDeque<>();
+
+        //compute the prefix sum and store it:
+        //loop thru the array:
+        for(int i=0;i<n;i++){
+            pre[i+1] = pre[i]+nums[i];
+        }
+
+        //we need to use the deque and the prefix sum togher:
+        for(int i=0;i<=n;i++){
+            //1. check if we should consider that index or not else pop it off:
+            while(!dq.isEmpty() && pre[i]<= pre[dq.peekLast()]){
+                dq.pollLast();
+            }
+            //2. Check if the condition is met that is the value is <=k
+            while(!dq.isEmpty() && pre[i]-pre[dq.peekFirst()]>=k){
+                //thats your ans:
+                res = Math.min(res,i-dq.removeFirst());
+            }
+            dq.offer(i);
+        }
+        return res == Integer.MAX_VALUE?-1:res;
+    }
+}
