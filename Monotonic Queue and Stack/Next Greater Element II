@@ -1,0 +1,39 @@
+class Solution {
+   public int[] nextGreaterElements(int[] A) {
+        
+        //The array is circular:
+        //Now that we have to find the next element that is 
+        //to use a stack :
+        //but we have to search in a  circular pattern:
+        
+        //length :
+        int n = A.length;
+        //output: 
+        int[] res = new int[A.length];
+
+        //stack 
+        Stack<Integer> stack = new Stack<Integer>();
+
+        //push elements into stack :
+        for(int i=n-1;i>=0;i--){
+            stack.push(i);
+        }
+        //Traverse thru the arrray and place the elements to the stack:
+        for(int i=n-1;i>=0;i--){
+            res[i] = -1;
+
+            //check if the stack can accomodate it:
+            while(!stack.isEmpty() && A[stack.peek()]<=A[i]){
+                //remove it from the stack:
+                stack.pop();
+            }
+            if(!stack.isEmpty()){
+                res[i] = A[stack.peek()];
+            }
+
+            stack.push(i);
+
+        }
+        return res;
+    }
+}
