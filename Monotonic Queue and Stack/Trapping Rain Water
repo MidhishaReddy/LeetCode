@@ -1,0 +1,36 @@
+class Solution {
+    public int trap(int[] height) {
+
+        if(height == null || height.length<=2){
+            return 0;
+        }
+        
+        //The hint here is to find the next largest element:
+        //when that asked think about the monotonic stack which stores the elements in either ascending order or decending order:
+
+        //we need a statck:
+        Stack<Integer> stack = new Stack<>();
+
+        //The result:
+        int res = 0;
+        
+        //traverse thru the array and place them in the stack accordingly:
+        for(int i=0;i<height.length;i++){
+
+            //while loop to maintain a stack in a decending order
+            while(!stack.isEmpty() && height[i] >= height[stack.peek()]){
+                //pop out the bot height which we are handling now:
+                int bot = stack.pop();
+                if(stack.isEmpty()) break;
+                int h = Math.min(height[i],height[stack.peek()]);
+                int l = i-stack.peek()-1;
+                //water area can be found by height*width
+                res += (h-height[bot]) * l;
+            }
+
+            //push the element on to the stack:
+            stack.push(i);
+        }
+        return res;
+    }
+}
