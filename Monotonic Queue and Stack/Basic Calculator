@@ -1,0 +1,61 @@
+class Solution {
+    public int calculate(String s) {
+        
+        //classic stack problem:
+        Stack<Integer> stack = new Stack<>();
+
+        //some variable:
+        int number =0;
+        int res =0;
+        int sign =1;
+
+        //how to obtain characters from string in java
+        for(int i=0;i<s.length();i++){
+            char c = s.charAt(i);
+            
+            //the character can be anything: Number, +,-,(,)
+            //what if it is number:
+            if(Character.isDigit(c)){
+                //do some caluculations:
+                number = number *10 + Character.getNumericValue(c);
+            }
+            else if(c =='+'){
+                res = res+ number*sign;
+                //reset the number back:
+                number =0;
+                sign =1;
+            }
+            else if(c == '-'){
+                //set the sign to -1;
+                res += sign * number;
+                //reset the values:
+                number =0;
+                sign = -1;
+
+            }
+            else if(c =='('){
+                //bring the stack to picture and push all the number ands the sign
+                stack.push(res);
+                stack.push(sign);
+                //reset the sign and results for the values in the paranthesis
+                sign =1;
+                res =0;
+            }
+            else if(c ==')'){
+                //caluculate the result on the left hand and pop out some of the values to generate the intermediate rresult:
+                //do the left caluculations:
+                res += sign *number;
+                int popedSign = stack.pop();
+                res = res*popedSign;
+                int popedNumb = stack.pop();
+                res = res + popedNumb;
+                //reset the number:
+                number = 0;
+            }
+
+        }
+     if(number!=0)
+        res= res+ number *sign;
+    return res;
+    }
+}
